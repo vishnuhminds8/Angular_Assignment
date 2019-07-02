@@ -1,0 +1,85 @@
+<header>
+	<h5>{{event.name}}</h5>
+</header>
+No. of available seats: {{event.seats}}
+
+<div *ngIf="successmsg" class="successmsg">
+  <h3>Tickets Booked</h3>
+</div>
+
+<form [formGroup]="eventbookingform" class="form-horizontal" role="form">
+	<div class="form-group">
+		<label for="name" class="col-sm-3 control-label"> Name</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control  form-control-sm" formControlName="name" />
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+        <div *ngIf="eventbookingform.controls['name'].errors && !eventbookingform.controls['name'].pristine">
+                <div [hidden]="!eventbookingform.controls['name'].errors.required" danger>Please enter your name</div>
+                <div [hidden]="!eventbookingform.controls['name'].errors.invaliddata" danger>Only letters and spaces are allowewd</div>
+              </div>
+
+        
+        <div class="form-group">
+            <label for="email" class="col-sm-3 control-label"> Email</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" formControlName="email" />
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+        <div *ngIf="eventbookingform.controls['email'].errors && !eventbookingform.controls['email'].pristine">
+                <div [hidden]="!eventbookingform.controls['email'].errors.required" danger>Please enter your email</div>
+                <div [hidden]="!eventbookingform.controls['email'].errors.invalidEmailAddress" danger>Invalid email</div>
+              </div>
+
+
+        <div class="form-group">
+            <label for="phone" class="col-sm-3 control-label"> Phone Number</label>
+            <div class="col-sm-6">
+                <input type="tel" maxlength="10" type="tel" class="form-control form-control-sm" formControlName="phone" />
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+        <div *ngIf="eventbookingform.controls['phone'].errors && !eventbookingform.controls['phone'].pristine">
+                <div [hidden]="!eventbookingform.controls['phone'].errors.minlength" danger>Please enter 10 digit phone number</div>
+              </div>
+
+              <div class="form-group">
+            <label for="seats" class="col-sm-3 control-label"> Number of Seats</label>
+            <div class="col-sm-6">
+                <select formControlName="seats" class="form-control form-control-sm" name="my-dropdown" (change)="addNewField()">
+    <option *ngFor="let number of seats" [ngValue]="number">{{number}}</option>
+</select>
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+         <div *ngIf="eventbookingform.controls['seats'].errors && !eventbookingform.controls['seats'].pristine">
+                <div [hidden]="!eventbookingform.controls['seats'].errors.required" danger>Please select the number of seats</div>
+                <div [hidden]="!eventbookingform.controls['seats'].errors.numseats" danger>select the number of seats</div>
+              </div>
+<div formArrayName="persons">
+  
+  <div *ngFor="let creds of eventbookingform.controls['persons'].controls; let i = index">
+  
+  <ng-container [formGroupName]="i">
+          <div class="form-group">
+            <label for="perso" class="col-sm-3 control-label"> Name of Attendee {{i+2}}</label>
+            <div class="col-sm-6">
+                <input type="text"  class="form-control" formControlName="person" />
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+        <div *ngIf="IsValidField(i, eventbookingform)" danger>
+            Please enter the name of Attendee {{i+2}} .
+        </div>
+         
+  </ng-container>
+  </div>
+        </div>
+  <div [ngStyle]="disablebtn">
+        <button [disabled]="!eventbookingform.valid" (click)="eventSubmit(eventbookingform.value)" type="button" class="btn btn-primary btn-sm">Submit</button>&nbsp;
+        <button  (click)="cancelEvent()" type="button" class="btn btn-primary btn-sm" [disabled]="formDisabled">Cancel</button>
+  </div>
+</form>
+

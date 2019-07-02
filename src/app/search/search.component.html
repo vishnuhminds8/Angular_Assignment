@@ -1,0 +1,29 @@
+<div class="form-group">
+  <div class="col-md-6">
+    <input type="text" [(ngModel)]="searchText" 
+           class="form-control" placeholder="SEARCH EVENTS" />
+  </div>
+</div>
+
+<div class="container">
+<div class="row">
+  <div *ngIf="(events |  events: searchText).length === 0">Not Found</div>
+	<div class="col-md-3 listing-block" *ngFor="let event of events | events: searchText">
+
+   <div class="card-deck">
+  <div class="card">
+    <img [src]="event.image" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h6 class="card-title">{{event.name}}</h6>
+      <h5 class="card-text">{{event.dateofevent}}</h5>
+      <small class="text-muted" *ngIf="event.seats!=0">{{event.seats}} Seats available </small>
+      <button *ngIf="event.seats > 0" type="button" class="btn btn-primary btn-sm" (click)="bookNow(event)">Book Now</button>
+      <button [disabled]="true" *ngIf="event.seats == 0" type="button" class="btn  btn-sm">Sold out</button>
+    </div>
+     </div>
+   </div>
+</div>
+</div>
+</div>
+
+
